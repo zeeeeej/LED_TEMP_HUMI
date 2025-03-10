@@ -16,53 +16,43 @@ led::led()
 
 }
 
+/*
+ * ./led_test <0|1|2|..>  on
+ * ./led_test <0|1|2|..>  off
+ * ./led_test <0|1|2|..>
+ */
 
 void led::led_init()
 {
-    /**
-      *  echo 131 > /sys/class/gpio/export
-      *  echo out > /sys/class/gpio/gpio131/direction
-      */
-    int fd;
-    fd = open("/sys/class/gpio/export",O_WRONLY);
+
+    fd = open("/dev/100ask_led",O_RDWR);
     if(fd<0){
-        qDebug() << "led_init open /sys/class/gpio/export fail";
+        qDebug() << "led_init open /dev/100ask_led fail";
         return;
     }
-    write(fd,"131\n",4);
-    close(fd);
-
-    fd = open("/sys/class/gpio/gpio131/direction",O_WRONLY);
-    if(fd<0){
-        qDebug() << "led_init open /sys/class/gpio/gpio131/direction fail";
-        return;
-    }
-    write(fd,"out\n",4);
-    close(fd);
-
 }
 
 void led::led_control(int on)
 {
-    /**
-      *  echo 0 > /sys/class/gpio/gpio131/value
-      *  echo 1 > /sys/class/gpio/gpio131/value
-      */
-    static int fd = -1;
-    if(-1==fd){
-         fd = open("/sys/class/gpio/gpio131/value",O_RDWR);
-    }
-
+    char buf[2];
     if(fd<0){
-        qDebug() << "led_control open /sys/class/gpio/gpio131/value fail";
+        qDebug() << "led_control /dev/100ask_led not opened.";
         return;
     }
+    // open first led.
+    buf[0]=0;
     if(on){
-         write(fd,"0\n",2);
+        buf[1] = 0;
     }else{
-         write(fd,"1\n",2);
+      buf[1] = 1;
     }
+ write(fd,buf,2);
 
-    //close(fd);
+}
+
+led::~led(){
+    if(fd){
+          close(fd);
+    }
 
 }

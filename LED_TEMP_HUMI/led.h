@@ -5,10 +5,14 @@
 
 class led
 {
+
+private:
+    int fd;
 public:
     led();
     void led_init();
     void led_control(int on);
+    ~led();
 };
 
 extern led g_led;
