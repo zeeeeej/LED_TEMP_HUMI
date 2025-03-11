@@ -16,6 +16,14 @@ MainWindow::~MainWindow()
 }
 
 
+QLabel *MainWindow::GetTemp(){
+    return  ui->label;
+}
+
+QLabel *MainWindow::GetHumi(){
+    return  ui->label_2;
+}
+
 
 void MainWindow::on_pushButton_clicked(){
     static int status = 1;
