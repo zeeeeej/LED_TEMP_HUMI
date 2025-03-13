@@ -1,31 +1,33 @@
 #include "dht11thread.h"
 #include <QtDebug>
+#include "rpc_client.h"
 
 
 DHT11Thread::DHT11Thread()
 {
     this->m_stop = false;
-       msleep(2000);
-    this->dht.dht11_init();
+//    this->dht.dht11_init();
 }
 
 void DHT11Thread::run(){
     unsigned char temp;
     unsigned char humi;
     bool ret ;
+    char buf[100];
     while (!m_stop) {
-            msleep(2000);
+            msleep(1000);
          //qDebug()<<"DHT11Thread dht11_read .....";
-        ret = dht.dht11_read(&temp,&humi);
-        if(ret){
+        ret = rpc_dht11_read(&temp,&humi);
+        if(ret==0){
             if(cb){
-                 //qDebug()<<"DHT11Thread DHT11Callback "<<(int)temp <<"," <<(int)humi;
+                sprintf(buf,"DHT11Thread DHT11Callback temp:%d humi:%d",temp,humi);
+                 qDebug()<<"DHT11Thread DHT11Callback " << buf;
                 cb((int)temp,(int)humi);
             }else{
                     qDebug()<<"DHT11Thread DHT11Callback is null";
             }
         }else{
-             //qDebug()<<"DHT11Thread dht11_read fail";
+             qDebug()<<"DHT11Thread dht11_read fail :" <<ret;
         }
 
 

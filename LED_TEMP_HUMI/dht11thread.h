@@ -2,7 +2,6 @@
 #define DHT11THREAD_H
 
 #include <QThread>
-#include "dht11.h"
 
 using DHT11Callback  = void(*)(int,int);
 
@@ -19,7 +18,6 @@ protected:
 
 private:
     bool m_stop =false;
-    dht11 dht;
     DHT11Callback cb;
 
 

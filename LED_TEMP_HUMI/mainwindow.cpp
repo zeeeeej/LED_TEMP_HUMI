@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-#include "led.h"
+#include "rpc_client.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,11 +17,11 @@ MainWindow::~MainWindow()
 
 
 QLabel *MainWindow::GetTemp(){
-    return  ui->label;
+    return  ui->label_2;
 }
 
 QLabel *MainWindow::GetHumi(){
-    return  ui->label_2;
+    return  ui->label;
 }
 
 
@@ -30,7 +30,7 @@ void MainWindow::on_pushButton_clicked(){
     /* 2.ctrl LED */
 
 
-    g_led.led_control(status);
+    int ret = rpc_led_control(status);
     status = !status;
     if(status){
         qDebug()<<"LED clicked on !";
