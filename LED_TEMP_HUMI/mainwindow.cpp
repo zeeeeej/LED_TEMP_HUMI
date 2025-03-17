@@ -17,11 +17,15 @@ MainWindow::~MainWindow()
 
 
 QLabel *MainWindow::GetTemp(){
-    return  ui->label_2;
+    return  ui->label_temp;
 }
 
 QLabel *MainWindow::GetHumi(){
-    return  ui->label;
+    return  ui->label_humi;
+}
+
+QLabel *MainWindow::GetLed(){
+    return  ui->label_led;
 }
 
 

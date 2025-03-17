@@ -25,8 +25,9 @@ class Ui_MainWindow
 public:
     QWidget *centralwidget;
     QPushButton *pushButton;
-    QLabel *label;
-    QLabel *label_2;
+    QLabel *label_humi;
+    QLabel *label_temp;
+    QLabel *label_led;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -40,16 +41,19 @@ public:
         pushButton = new QPushButton(centralwidget);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(110, 230, 261, 221));
-        label = new QLabel(centralwidget);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(530, 140, 151, 141));
-        label_2 = new QLabel(centralwidget);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(530, 340, 151, 141));
+        label_humi = new QLabel(centralwidget);
+        label_humi->setObjectName(QString::fromUtf8("label_humi"));
+        label_humi->setGeometry(QRect(530, 140, 151, 141));
+        label_temp = new QLabel(centralwidget);
+        label_temp->setObjectName(QString::fromUtf8("label_temp"));
+        label_temp->setGeometry(QRect(530, 340, 151, 141));
+        label_led = new QLabel(centralwidget);
+        label_led->setObjectName(QString::fromUtf8("label_led"));
+        label_led->setGeometry(QRect(140, 260, 196, 51));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 39));
+        menubar->setGeometry(QRect(0, 0, 800, 56));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -64,8 +68,9 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         pushButton->setText(QApplication::translate("MainWindow", "LED", nullptr));
-        label->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
-        label_2->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_humi->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_temp->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_led->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
     } // retranslateUi
 
 };

@@ -17,6 +17,7 @@ public:
     ~MainWindow();
     QLabel *GetTemp();
     QLabel *GetHumi();
+    QLabel *GetLed();
 
 
 

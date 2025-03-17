@@ -10,17 +10,37 @@
 
 
  QLabel *tmepLabel;
-  QLabel *humiLabel;
+ QLabel *humiLabel;
+ QLabel *ledLabel;
 
-void onDTH11Changed(int humi,int temp){
+void onDTH11Changed(int humi,int temp,int led){
     char buff[20];
     if(tmepLabel){
-        sprintf(buff,"temp:%d",temp);
-        tmepLabel->setText(buff);
+        if(-1==temp){
+            tmepLabel->setText("loading");
+        }else{
+            sprintf(buff,"temp:%d",temp);
+            tmepLabel->setText(buff);
+        }
+
     }
     if(humiLabel){
-         sprintf(buff,"humi:%d%%",humi);
-        humiLabel->setText(buff);
+        if(-1==humi){
+            humiLabel->setText("loading");
+        }else{
+            sprintf(buff,"humi:%d%%",humi);
+            humiLabel->setText(buff);
+        }
+    }
+    if(ledLabel){
+        if(led==-1){
+            ledLabel->setText("LOADING");
+        }
+        else if(led==0){
+            ledLabel->setText("OFF");
+        }else{
+            ledLabel->setText("ON");
+        }
     }
 }
 
@@ -34,6 +54,10 @@ int main(int argc, char *argv[])
     MainWindow w;
      tmepLabel = w.GetTemp();
      humiLabel = w.GetHumi();
+     ledLabel = w.GetLed();
+     tmepLabel->setText("loading");
+     humiLabel->setText("loading");
+     ledLabel->setText("loading");
     w.show();
 
     /* create dht11 thread */

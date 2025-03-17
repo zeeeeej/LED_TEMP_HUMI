@@ -45,18 +45,18 @@ int rpc_led_control( int on)
         }
         else
         {
-            printf("read rpc reply err : %d\n", iLen);
+            printf("rpc_led_control reply err : %d\n", iLen);
             return -1;
         }
     }
     else
     {
-        printf("send rpc request err : %d, %s\n", iLen, strerror(errno));
+        printf("send rpc_led_control err : %d, %s\n", iLen, strerror(errno));
         return -1;
     }
 }
 
-int rpc_dht11_read(unsigned char *humi, unsigned char *temp)
+int rpc_dht11_read(int *humi, int *temp)
 {
     char buf[300];
     size_t iLen;
@@ -85,9 +85,9 @@ int rpc_dht11_read(unsigned char *humi, unsigned char *temp)
             {
                 cJSON * a = cJSON_GetArrayItem(result,0);
                 cJSON * b = cJSON_GetArrayItem(result,1);
- printf("read rpc reply  : %d,%d\n", a->valueint,b->valueint);
-                *humi = static_cast<unsigned char>(a->valueint);
-                *temp = static_cast<unsigned char>(b->valueint);
+                printf("rpc_dht11_read  : %d,%d\n", a->valueint,b->valueint);
+                *humi = a->valueint;//static_cast<unsigned char>(a->valueint);
+                *temp = b->valueint;//static_cast<unsigned char>(b->valueint);
                 
                 cJSON_Delete(root);
                 return 0;
@@ -100,13 +100,63 @@ int rpc_dht11_read(unsigned char *humi, unsigned char *temp)
         }
         else
         {
-            printf("read rpc reply err : %d\n", iLen);
+            printf("rpc_dht11_read err : %d\n", iLen);
             return -1;
         }
     }
     else
     {
-        printf("send rpc request err : %d, %s\n", iLen, strerror(errno));
+        printf("send rpc_dht11_read err : %d, %s\n", iLen, strerror(errno));
+        return -1;
+    }
+}
+
+int rpc_led_read(int *led){
+    char buf[300];
+    size_t iLen;
+
+    sprintf(buf, "{\"method\": \"led_read\"," \
+                   "\"params\": [0], \"id\": \"2\" }");
+
+    iLen = send(g_iSocketClient, buf, strlen(buf), 0);
+    if (iLen ==  strlen(buf))
+    {
+        while (1)
+        {
+            iLen = read(g_iSocketClient, buf, sizeof(buf));
+            buf[iLen] = 0;
+            if (iLen == 1 && (buf[0] == '\r' || buf[0] == '\n'))
+                continue;
+            else
+                break;
+        }
+
+        if (iLen > 0)
+        {
+            cJSON *root = cJSON_Parse(buf);
+            cJSON *result = cJSON_GetObjectItem(root, "result");
+            if (result)
+            {
+                *led = result->valueint;
+                printf("rpc_led_read  : %d\n", result->valueint);
+                cJSON_Delete(root);
+                return 0;
+            }
+            else
+            {
+                cJSON_Delete(root);
+                return -1;
+            }
+        }
+        else
+        {
+            printf("rpc_led_read err : %d\n", iLen);
+            return -1;
+        }
+    }
+    else
+    {
+        printf("send rpc_led_read err : %d, %s\n", iLen, strerror(errno));
         return -1;
     }
 }
@@ -135,63 +185,4 @@ void RPC_Client_Init(void)
         printf("connect error!\n");
         return ;
     }
-
-
 }
-
-//static void print_usage(char *exec)
-//{
-//    printf("Usage:\n");
-//    printf("%s led <0|1>\n", exec);
-//    printf("%s dht11\n", exec);
-//}
-
-//int main(int argc, char **argv)
-//{
-//    if (argc < 2)
-//    {
-//        print_usage(argv[0]);
-//        return -1;
-//    }
-
-//    {
-//        int sum;
-//        int fd = RPC_Client_Init();
-
-//        if (fd < 0)
-//        {
-//            printf("RPC_Client_Init err : %d\n", fd);
-//            return -1;
-//        }
-
-//        if (argc == 3 && !strcmp(argv[1], "led"))
-//        {
-//            int on = (int)strtoul(argv[2], NULL, 0);
-//            int err = rpc_led_control(fd, on);
-//            if (!err)
-//            {
-//                printf("set led ok\n");
-//            }
-//            else
-//            {
-//                printf("rpc err : %d\n", err);
-//            }
-//        }
-//        else if (argc == 2 && !strcmp(argv[1], "dht11"))
-//        {
-//            char humi, temp;
-//            int err = rpc_dht11_read(fd, &humi, &temp);
-//            if (err)
-//            {
-//                printf("rpc err : %d\n", err);
-//            }
-//	    else
-//            {
-//                 printf("dht11 humi = %d, temp = %d\n", humi, temp);
-//            }
-//        }
-//    }
-//    return 0;
-//}
-
-

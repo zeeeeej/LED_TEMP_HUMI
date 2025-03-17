@@ -10,19 +10,22 @@ DHT11Thread::DHT11Thread()
 }
 
 void DHT11Thread::run(){
-    unsigned char temp;
-    unsigned char humi;
-    bool ret ;
-    char buf[100];
+    int temp;
+    int humi;
+    int led;
+    int ret ;
+    int ret2 ;
+    //char buf[100];
     while (!m_stop) {
             msleep(1000);
          //qDebug()<<"DHT11Thread dht11_read .....";
         ret = rpc_dht11_read(&temp,&humi);
-        if(ret==0){
+        ret2 = rpc_led_read(&led);
+        if(ret==0 && 0== ret2){
             if(cb){
-                sprintf(buf,"DHT11Thread DHT11Callback temp:%d humi:%d",temp,humi);
-                 qDebug()<<"DHT11Thread DHT11Callback " << buf;
-                cb((int)temp,(int)humi);
+                //sprintf(buf,"DHT11Thread DHT11Callback temp:%d humi:%d",temp,humi);
+                //qDebug()<<"DHT11Thread DHT11Callback " << buf;
+                cb(temp,humi,led);
             }else{
                     qDebug()<<"DHT11Thread DHT11Callback is null";
             }

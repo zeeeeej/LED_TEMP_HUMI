@@ -3,7 +3,7 @@
 
 #include <QThread>
 
-using DHT11Callback  = void(*)(int,int);
+using DHT11Callback  = void(*)(int,int,int);
 
 class DHT11Thread:public QThread
 {
