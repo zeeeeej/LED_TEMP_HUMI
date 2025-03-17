@@ -17,6 +17,7 @@ static int g_iSocketClient;
 
 int rpc_led_control( int on)
 {
+	printf("[rpc-client]rpc_led_control %d\n",on);
     char buf[100];
     size_t iLen;
     int ret = -1;
@@ -45,13 +46,13 @@ int rpc_led_control( int on)
         }
         else
         {
-            printf("rpc_led_control reply err : %d\n", iLen);
+            printf("[rpc-client]rpc_led_control reply err : %d\n", iLen);
             return -1;
         }
     }
     else
     {
-        printf("send rpc_led_control err : %d, %s\n", iLen, strerror(errno));
+        printf("[rpc-client]send rpc_led_control err : %d, %s\n", iLen, strerror(errno));
         return -1;
     }
 }
@@ -85,7 +86,7 @@ int rpc_dht11_read(int *humi, int *temp)
             {
                 cJSON * a = cJSON_GetArrayItem(result,0);
                 cJSON * b = cJSON_GetArrayItem(result,1);
-                printf("rpc_dht11_read  : %d,%d\n", a->valueint,b->valueint);
+                //printf("[rpc-client]rpc_dht11_read  : %d,%d\n", a->valueint,b->valueint);
                 *humi = a->valueint;//static_cast<unsigned char>(a->valueint);
                 *temp = b->valueint;//static_cast<unsigned char>(b->valueint);
                 
@@ -100,13 +101,13 @@ int rpc_dht11_read(int *humi, int *temp)
         }
         else
         {
-            printf("rpc_dht11_read err : %d\n", iLen);
+            printf("[rpc-client]rpc_dht11_read err : %d\n", iLen);
             return -1;
         }
     }
     else
     {
-        printf("send rpc_dht11_read err : %d, %s\n", iLen, strerror(errno));
+        printf("[rpc-client]send rpc_dht11_read err : %d, %s\n", iLen, strerror(errno));
         return -1;
     }
 }
@@ -138,7 +139,7 @@ int rpc_led_read(int *led){
             if (result)
             {
                 *led = result->valueint;
-                printf("rpc_led_read  : %d\n", result->valueint);
+                //printf("[rpc-client]rpc_led_read  : %d\n", result->valueint);
                 cJSON_Delete(root);
                 return 0;
             }
@@ -150,13 +151,13 @@ int rpc_led_read(int *led){
         }
         else
         {
-            printf("rpc_led_read err : %d\n", iLen);
+            printf("[rpc-client]rpc_led_read err : %d\n", iLen);
             return -1;
         }
     }
     else
     {
-        printf("send rpc_led_read err : %d, %s\n", iLen, strerror(errno));
+        printf("[rpc-client]send rpc_led_read err : %d, %s\n", iLen, strerror(errno));
         return -1;
     }
 }
@@ -182,7 +183,7 @@ void RPC_Client_Init(void)
     iRet = connect(g_iSocketClient, (const struct sockaddr *)&tSocketServerAddr, sizeof(struct sockaddr));
     if (-1 == iRet)
     {
-        printf("connect error!\n");
+        printf("[rpc-client]connect error!\n");
         return ;
     }
 }
