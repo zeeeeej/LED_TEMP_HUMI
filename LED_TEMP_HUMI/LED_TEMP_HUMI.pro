@@ -31,7 +31,16 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
+LIBS += -L/usr/local/imx6ull/curl/lib \
+        -L/usr/local/imx6ull/ssl/lib \
+        -L/home/book/proj/hdinit/libs \
+        -lhdservice \
+        -lcurl \
+        -lssl \
+        -lcrypto
+
 INCLUDEPATH +=/home/book/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+INCLUDEPATH +=/home/book/proj/hdinit/includes
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

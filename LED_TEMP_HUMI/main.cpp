@@ -6,7 +6,15 @@
 
 #include "dht11thread.h"
 
+extern "C" {
+#include "hd_ipc_service.h"
+}
+
 #include <stdio.h>
+
+#include <sys/types.h>
+      #include <unistd.h>
+
 
 
  QLabel *tmepLabel;
@@ -44,10 +52,20 @@ void onDTH11Changed(int humi,int temp,int led){
     }
 }
 
+void p1(){
+
+}
+
+void p2(int index){
+
+}
+
 int main(int argc, char *argv[])
 {
 
     /* 1.init LED */
+    int pid = getpid();
+    ipc_service_init("hdqt",pid,"1.0.0",p1,p2);
     RPC_Client_Init();
 
     QApplication a(argc, argv);
